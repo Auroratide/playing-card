@@ -1,14 +1,19 @@
-import { CardValue, fromString } from './value'
+import { CardValue, valueFromString } from './value'
+import { CardSuit, suitFromString } from './suit'
 
 export class PlayingCard extends HTMLElement {
     static elementName = 'playing-card'
 
-    static html = `<span id="value"></span>`
+    static html = `
+        <span id="value"></span>
+        <span id="suit"></span>
+    `
 
     static css = ``
 
     private elements = {
         value: () => this.shadowRoot!.getElementById('value')!,
+        suit: () => this.shadowRoot!.getElementById('suit')!,
     }
 
     constructor() {
@@ -17,7 +22,7 @@ export class PlayingCard extends HTMLElement {
     }
 
     static get observedAttributes(): string[] {
-        return ['value']
+        return ['value', 'suit']
     }
 
     attributeChangedCallback(attr: string, oldValue: string, newValue: string) {
@@ -25,10 +30,17 @@ export class PlayingCard extends HTMLElement {
     }
 
     get value(): keyof typeof CardValue | null {
-        return fromString(this.getAttribute('value'))
+        return valueFromString(this.getAttribute('value'))
     }
     set value(v: keyof typeof CardValue | null) {
         this.setAttribute('value', v ?? '')
+    }
+
+    get suit(): keyof typeof CardSuit | null {
+        return suitFromString(this.getAttribute('suit'))
+    }
+    set suit(v: keyof typeof CardSuit | null) {
+        this.setAttribute('suit', v ?? '')
     }
 
     private createRoot(): ShadowRoot {
@@ -48,5 +60,6 @@ export class PlayingCard extends HTMLElement {
 
     private setDisplay = () => {
         this.elements.value().textContent = this.value
+        this.elements.suit().textContent = this.suit
     }
 }

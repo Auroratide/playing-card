@@ -14,7 +14,7 @@ export const CardValue = {
     'a': 'a',
 }
 
-export const fromString = (s: string | null): keyof typeof CardValue | null => {
+export const valueFromString = (s: string | null): keyof typeof CardValue | null => {
     const ls = s?.toLowerCase()
     if (Object.keys(CardValue).includes(ls ?? ''))
         return ls as keyof typeof CardValue
