@@ -1,19 +1,24 @@
 import { CardValue, valueFromString } from './value'
 import { CardSuit, suitFromString } from './suit'
 
+const Attr = {
+    value: 'value',
+    suit: 'suit',
+}
+
 export class PlayingCard extends HTMLElement {
     static elementName = 'playing-card'
 
     static html = `
-        <span id="value"></span>
-        <span id="suit"></span>
+        <span id="${Attr.value}"></span>
+        <span id="${Attr.suit}"></span>
     `
 
     static css = ``
 
     private elements = {
-        value: () => this.shadowRoot!.getElementById('value')!,
-        suit: () => this.shadowRoot!.getElementById('suit')!,
+        value: () => this.shadowRoot!.getElementById(Attr.value)!,
+        suit: () => this.shadowRoot!.getElementById(Attr.suit)!,
     }
 
     constructor() {
@@ -22,7 +27,7 @@ export class PlayingCard extends HTMLElement {
     }
 
     static get observedAttributes(): string[] {
-        return ['value', 'suit']
+        return Object.values(Attr)
     }
 
     attributeChangedCallback(attr: string, oldValue: string, newValue: string) {
@@ -30,17 +35,17 @@ export class PlayingCard extends HTMLElement {
     }
 
     get value(): keyof typeof CardValue | null {
-        return valueFromString(this.getAttribute('value'))
+        return valueFromString(this.getAttribute(Attr.value))
     }
     set value(v: keyof typeof CardValue | null) {
-        this.setAttribute('value', v ?? '')
+        this.setAttribute(Attr.value, v ?? '')
     }
 
     get suit(): keyof typeof CardSuit | null {
-        return suitFromString(this.getAttribute('suit'))
+        return suitFromString(this.getAttribute(Attr.suit))
     }
     set suit(v: keyof typeof CardSuit | null) {
-        this.setAttribute('suit', v ?? '')
+        this.setAttribute(Attr.suit, v ?? '')
     }
 
     private createRoot(): ShadowRoot {
