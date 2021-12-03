@@ -8,10 +8,10 @@ export const CardValue = {
     '8': '8',
     '9': '9',
     '10': '10',
-    'j': 'j',
-    'q': 'q',
-    'k': 'k',
-    'a': 'a',
+    'j': 'jack',
+    'q': 'queen',
+    'k': 'king',
+    'a': 'ace',
 }
 
 export const valueFromString = (s: string | null): keyof typeof CardValue | null => {

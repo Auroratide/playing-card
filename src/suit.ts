@@ -1,8 +1,8 @@
 export const CardSuit = {
-    's': 's',
-    'h': 'h',
-    'c': 'c',
-    'd': 'd',
+    's': 'spades',
+    'h': 'hearts',
+    'c': 'clubs',
+    'd': 'diamonds',
 }
 
 export const suitFromString = (s: string | null): keyof typeof CardSuit | null => {

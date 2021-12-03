@@ -26,12 +26,18 @@ export class PlayingCard extends HTMLElement {
         this.createRoot()
     }
 
+    connectedCallback() {
+        this.setDisplay()
+        this.setAccessibility()
+    }
+
     static get observedAttributes(): string[] {
         return Object.values(Attr)
     }
 
     attributeChangedCallback(attr: string, oldValue: string, newValue: string) {
         this.setDisplay()
+        this.setAccessibility()
     }
 
     get value(): keyof typeof CardValue | null {
@@ -66,5 +72,16 @@ export class PlayingCard extends HTMLElement {
     private setDisplay = () => {
         this.elements.value().textContent = this.value
         this.elements.suit().textContent = this.suit
+    }
+
+    private setAccessibility = () => {
+        if (!this.getAttribute('role')) {
+            this.setAttribute('role', 'figure')
+        }
+
+        if (!this.value || !this.suit)
+            this.setAttribute('aria-label', 'unknown card')
+        else
+            this.setAttribute('aria-label', `${CardValue[this.value]} of ${CardSuit[this.suit]}`)
     }
 }
