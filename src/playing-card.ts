@@ -1,13 +1,34 @@
+import { CardValue, fromString } from './value'
+
 export class PlayingCard extends HTMLElement {
     static elementName = 'playing-card'
 
-    static html = `<p>Hello!</p>`
+    static html = `<span id="value"></span>`
 
-    static css = `p { color: red; }`
+    static css = ``
+
+    private elements = {
+        value: () => this.shadowRoot!.getElementById('value')!,
+    }
 
     constructor() {
         super()
         this.createRoot()
+    }
+
+    static get observedAttributes(): string[] {
+        return ['value']
+    }
+
+    attributeChangedCallback(attr: string, oldValue: string, newValue: string) {
+        this.setDisplay()
+    }
+
+    get value(): keyof typeof CardValue | null {
+        return fromString(this.getAttribute('value'))
+    }
+    set value(v: keyof typeof CardValue | null) {
+        this.setAttribute('value', v ?? '')
     }
 
     private createRoot(): ShadowRoot {
@@ -23,5 +44,9 @@ export class PlayingCard extends HTMLElement {
         root.appendChild(template.content)
 
         return root
+    }
+
+    private setDisplay = () => {
+        this.elements.value().textContent = this.value
     }
 }
