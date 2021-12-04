@@ -60,12 +60,14 @@ export class PlayingCard extends HTMLElement {
 
     static css = `
         :host {
+            --w: var(--card-width, 5em);
+            box-sizing: border-box;
             display: inline-block;
             position: relative;
 
-            width: 5em;
-            height: 7em;
-            border: 1px solid black;
+            width: var(--w);
+            height: calc(7 / 5 * var(--w));
+            border: calc(0.025 * var(--w)) solid black;
         }
         
         #paths {
@@ -75,6 +77,7 @@ export class PlayingCard extends HTMLElement {
         }
 
         .value {
+            font-size: calc(0.2 * var(--w));
             text-transform: uppercase;
         }
 
@@ -84,7 +87,7 @@ export class PlayingCard extends HTMLElement {
 
         .card-value {
             position: absolute;
-            top: 0; left: 0.125em;
+            top: 0; left: calc(0.025 * var(--w));
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -92,12 +95,12 @@ export class PlayingCard extends HTMLElement {
 
         .card-value.upside-down {
             top: auto; left: auto;
-            bottom: 0; right: 0.125em;
+            bottom: 0; right: calc(0.025 * var(--w));
         }
 
         .suit {
-            width: 1em;
-            height: 1em;
+            width: calc(0.2 * var(--w));
+            height: calc(0.2 * var(--w));
             background-color: currentColor;
         }
 
