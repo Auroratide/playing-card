@@ -3,9 +3,8 @@ import { PlayingCard } from './playing-card'
 import './define'
 
 describe('my-component', () => {
-    const display = (elem: PlayingCard) =>
-        (elem.shadowRoot?.getElementById('value')?.textContent ?? '') +
-        (elem.shadowRoot?.getElementById('suit')?.textContent ?? '');
+    const displayValue = (elem: PlayingCard) => elem.shadowRoot?.querySelector('.value')?.textContent
+    const displaySuit = (elem: PlayingCard) => elem.shadowRoot?.querySelector('#suit-container')?.className
 
     const label = (elem: PlayingCard) => elem.getAttribute('aria-label')
 
@@ -15,7 +14,7 @@ describe('my-component', () => {
                 <playing-card value="6"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('6')
+            expect(displayValue(elem)).to.equal('6')
         })
 
         it('face value', async () => {
@@ -23,7 +22,7 @@ describe('my-component', () => {
                 <playing-card value="q"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('q')
+            expect(displayValue(elem)).to.equal('q')
         })
 
         it('update via property', async () => {
@@ -31,10 +30,10 @@ describe('my-component', () => {
                 <playing-card value="2"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('2')
+            expect(displayValue(elem)).to.equal('2')
 
             elem.value = 'k'
-            expect(display(elem)).to.contain('k')
+            expect(displayValue(elem)).to.equal('k')
         })
 
         it('update via attribute', async () => {
@@ -42,10 +41,10 @@ describe('my-component', () => {
                 <playing-card value="a"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('a')
+            expect(displayValue(elem)).to.equal('a')
 
             elem.setAttribute('value', '10')
-            expect(display(elem)).to.contain('10')
+            expect(displayValue(elem)).to.equal('10')
         })
 
         it('unknown value', async () => {
@@ -63,7 +62,7 @@ describe('my-component', () => {
                 <playing-card suit="s"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('s')
+            expect(displaySuit(elem)).to.equal('spades')
         })
 
         it('update via property', async () => {
@@ -71,10 +70,10 @@ describe('my-component', () => {
                 <playing-card suit="h"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('h')
+            expect(displaySuit(elem)).to.contain('hearts')
 
             elem.suit = 'd'
-            expect(display(elem)).to.contain('d')
+            expect(displaySuit(elem)).to.contain('diamonds')
         })
 
         it('update via attribute', async () => {
@@ -82,10 +81,10 @@ describe('my-component', () => {
                 <playing-card suit="c"></playing-card>
             `)
 
-            expect(display(elem)).to.contain('c')
+            expect(displaySuit(elem)).to.contain('clubs')
 
             elem.setAttribute('suit', 's')
-            expect(display(elem)).to.contain('s')
+            expect(displaySuit(elem)).to.contain('spades')
         })
 
         it('unknown value', async () => {

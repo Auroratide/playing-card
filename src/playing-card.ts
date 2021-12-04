@@ -10,15 +10,126 @@ export class PlayingCard extends HTMLElement {
     static elementName = 'playing-card'
 
     static html = `
-        <span id="${Attr.value}"></span>
-        <span id="${Attr.suit}"></span>
+        <svg id="paths">
+            <defs>
+                <clipPath id="hearts" clipPathUnits="objectBoundingBox">
+                    <path d="
+                        M 0.5 1
+                        C 0.5 1 0.075 0.7 0.1 0.25
+                        A 0.2 0.25 1 1 1 0.5 0.3
+                        A 0.2 0.25 1 1 1 0.9 0.25
+                        C 0.925 0.7 0.5 1 0.5 1 Z
+                    " />
+                </clipPath>
+                <clipPath id="clubs" clipPathUnits="objectBoundingBox">
+                    <path d="
+                        M 0.3 0.4
+                        A 0.225 0.225 1 1 1 0.7 0.4
+                        A 0.225 0.225 1 1 1 0.55 0.75
+                        Q 0.55 0.85 0.6 1
+                        L 0.4 1
+                        Q 0.45 0.85 0.45 0.75
+                        A 0.225 0.225 1 1 1 0.3 0.4 Z
+                    " />
+                </clipPath>
+                <clipPath id="spades" clipPathUnits="objectBoundingBox">
+                    <path d="
+                        M 0.5 0
+                        C 0.65 0.25 0.9 0.375 0.9 0.6
+                        S 0.65 0.9 0.55 0.75
+                        Q 0.55 0.85 0.6 1
+                        L 0.4 1
+                        Q 0.45 0.85 0.45 0.75
+                        C 0.35 0.9 0.1 0.825 0.1 0.6
+                        S 0.35 0.25 0.5 0 Z
+                    " />
+                </clipPath>
+            </defs>
+        </svg>
+        <div id="${Attr.suit}-container">
+            <div class="card-value">
+                <span class="${Attr.value}"></span>
+                <div class="${Attr.suit}"></div>
+            </div>
+            <div class="card-value upside-down">
+                <span class="${Attr.value}"></span>
+                <div class="${Attr.suit}"></div>
+            </div>
+        </div>
     `
 
-    static css = ``
+    static css = `
+        :host {
+            display: inline-block;
+            position: relative;
+
+            width: 5em;
+            height: 7em;
+            border: 1px solid black;
+        }
+        
+        #paths {
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .value {
+            text-transform: uppercase;
+        }
+
+        .upside-down {
+            transform: rotate(180deg);
+        }
+
+        .card-value {
+            position: absolute;
+            top: 0; left: 0.125em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-value.upside-down {
+            top: auto; left: auto;
+            bottom: 0; right: 0.125em;
+        }
+
+        .suit {
+            width: 1em;
+            height: 1em;
+            background-color: currentColor;
+        }
+
+        .diamonds, .hearts {
+            color: red;
+        }
+
+        .clubs, .spades {
+            color: black;
+        }
+
+        .diamonds .suit {
+            clip-path: polygon(50% 0, 90% 50%, 50% 100%, 10% 50%);
+        }
+
+        .hearts .suit {
+            clip-path: url(#hearts);
+        }
+
+        .clubs .suit {
+            clip-path: url(#clubs);
+        }
+
+        .spades .suit {
+            clip-path: url(#spades);
+        }
+    `
 
     private elements = {
-        value: () => this.shadowRoot!.getElementById(Attr.value)!,
-        suit: () => this.shadowRoot!.getElementById(Attr.suit)!,
+        value: () => this.shadowRoot!.querySelectorAll(`.${Attr.value}`),
+        suitContainer: () => this.shadowRoot!.getElementById(`${Attr.suit}-container`),
+        suit: () => this.shadowRoot!.querySelectorAll(`.${Attr.suit}`),
     }
 
     constructor() {
@@ -70,8 +181,8 @@ export class PlayingCard extends HTMLElement {
     }
 
     private setDisplay = () => {
-        this.elements.value().textContent = this.value
-        this.elements.suit().textContent = this.suit
+        this.elements.value().forEach(it => it.textContent = this.value)
+        this.elements.suitContainer()!.className = CardSuit[this.suit!]
     }
 
     private setAccessibility = () => {
