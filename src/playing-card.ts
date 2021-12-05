@@ -60,7 +60,7 @@ export class PlayingCard extends HTMLElement {
 
     static css = `
         :host {
-            --w: var(--card-width, 5em);
+            --w: var(--playing-card-width, 5em);
             box-sizing: border-box;
             display: inline-block;
             position: relative;
