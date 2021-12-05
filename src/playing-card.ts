@@ -69,6 +69,7 @@ export class PlayingCard extends HTMLElement {
             height: calc(7 / 5 * var(--w));
             border: calc(0.025 * var(--w)) solid black;
             border-radius: calc(0.0625 * var(--w));
+            background-color: var(--playing-card-bg, hsl(0, 0%, 100%));
         }
         
         #paths {
@@ -105,12 +106,20 @@ export class PlayingCard extends HTMLElement {
             background-color: currentColor;
         }
 
-        .diamonds, .hearts {
-            color: red;
+        .diamonds {
+            color: var(--playing-card-diamonds-color, hsl(0, 100%, 50%));
         }
 
-        .clubs, .spades {
-            color: black;
+        .hearts {
+            color: var(--playing-card-hearts-color, hsl(0, 100%, 50%));
+        }
+
+        .clubs {
+            color: var(--playing-card-clubs-color, hsl(0, 0%, 0%));
+        }
+
+        .spades {
+            color: var(--playing-card-spades-color, hsl(0, 0%, 0%));
         }
 
         .diamonds .suit {
