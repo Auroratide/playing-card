@@ -68,6 +68,7 @@ export class PlayingCard extends HTMLElement {
             width: var(--w);
             height: calc(7 / 5 * var(--w));
             border: calc(0.025 * var(--w)) solid black;
+            border-radius: calc(0.0625 * var(--w));
         }
         
         #paths {
