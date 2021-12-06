@@ -47,13 +47,14 @@ export class PlayingCard extends HTMLElement {
             </defs>
         </svg>
         <div id="${Attr.suit}-container">
-            <div class="card-value">
-                <span class="${Attr.value}"></span>
+            <div class="top-left">
                 <div class="${Attr.suit}"></div>
             </div>
-            <div class="card-value upside-down">
-                <span class="${Attr.value}"></span>
+            <div class="bottom-right">
                 <div class="${Attr.suit}"></div>
+            </div>
+            <div class="center">
+                <span class="${Attr.value}"></span>
             </div>
         </div>
     `
@@ -78,31 +79,42 @@ export class PlayingCard extends HTMLElement {
             position: absolute;
         }
 
+        #suit-container {
+            width: 100%;
+            height: 100%;
+        }
+
         .value {
             font-size: calc(0.2 * var(--w));
             text-transform: uppercase;
         }
 
-        .upside-down {
+        .top-left {
+            position: absolute;
+            top: calc(0.05 * var(--w));
+            left: calc(0.025 * var(--w));
+        }
+
+        .bottom-right {
+            position: absolute;
+            bottom: calc(0.05 * var(--w));
+            right: calc(0.025 * var(--w));
             transform: rotate(180deg);
         }
 
-        .card-value {
-            position: absolute;
-            top: 0; left: calc(0.025 * var(--w));
+        .center {
+            width: 100%;
+            height: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
-        }
-
-        .card-value.upside-down {
-            top: auto; left: auto;
-            bottom: 0; right: calc(0.025 * var(--w));
+            justify-content: center;
+            font-size: calc(0.5 * var(--w));
+            font-weight: bold;
         }
 
         .suit {
-            width: calc(0.2 * var(--w));
-            height: calc(0.2 * var(--w));
+            width: calc(0.25 * var(--w));
+            height: calc(0.25 * var(--w));
             background-color: currentColor;
         }
 
