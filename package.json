@@ -7,10 +7,10 @@
   "type": "module",
   "scripts": {
     "start": "wds --node-resolve -p 3000",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf lib",
     "build": "npm run clean && tsc",
     "dev": "npm-run-all --parallel 'build -- --watch' 'start -- --watch'",
-    "test": "npm run build && wtr --node-resolve 'dist/**/*.spec.js'"
+    "test": "npm run build && wtr --node-resolve 'lib/**/*.spec.js'"
   },
   "author": {
     "name": "Timothy Foster",

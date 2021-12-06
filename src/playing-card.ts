@@ -257,6 +257,8 @@ export class PlayingCard extends HTMLElement {
         this.toggleAttribute(Attr.facedown, v)
     }
 
+    flip = () => this.facedown = !this.facedown
+
     private createRoot(): ShadowRoot {
         const root = this.shadowRoot ?? this.attachShadow({ mode: 'open' })
 
@@ -288,7 +290,7 @@ export class PlayingCard extends HTMLElement {
 
     private setAccessibility = () => {
         if (!this.getAttribute('role')) {
-            this.setAttribute('role', 'figure')
+            this.setAttribute('role', 'img')
         }
 
         this.setAttribute('aria-label', this.accessibleName())

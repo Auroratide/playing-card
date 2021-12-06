@@ -109,6 +109,9 @@ describe('my-component', () => {
 
             elem.toggleAttribute('facedown')
             expect(label(elem)).to.equal('card faced down')
+
+            elem.flip()
+            expect(label(elem)).to.equal('ace of spades')
         })
     })
 
@@ -118,7 +121,7 @@ describe('my-component', () => {
                 <playing-card></playing-card>
             `)
 
-            expect(elem.getAttribute('role')).to.equal('figure')
+            expect(elem.getAttribute('role')).to.equal('img')
         })
 
         it('user-provided role', async () => {
