@@ -1,16 +1,24 @@
 {
   "name": "@auroratide/playing-card",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "description": "Web component for a playing card",
+  "keywords": [
+    "web-component",
+    "element",
+    "card",
+    "poker",
+    "casino"
+  ],
+  "main": "lib/index.js",
+  "module": "lib/index.js",
   "type": "module",
   "scripts": {
     "start": "wds --node-resolve -p 3000",
     "clean": "rm -rf lib",
     "build": "npm run clean && tsc",
     "dev": "npm-run-all --parallel 'build -- --watch' 'start -- --watch'",
-    "test": "npm run build && wtr --node-resolve 'lib/**/*.spec.js'"
+    "test": "npm run build && wtr --node-resolve 'lib/**/*.spec.js'",
+    "prepublishOnly": "npm run test"
   },
   "author": {
     "name": "Timothy Foster",
