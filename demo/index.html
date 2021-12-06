@@ -14,6 +14,14 @@
             <playing-card value="6" suit="h"></playing-card>
             <playing-card value="10" suit="c"></playing-card>
             <playing-card value="a" suit="d"></playing-card>
+            <playing-card id="flipme" value="7" suit="d" facedown></playing-card>
         </main>
+
+        <script>
+            const flip = document.getElementById('flipme')
+            flip.addEventListener('click', () => {
+                flip.facedown = !flip.facedown
+            })
+        </script>
     </body>
 </html>

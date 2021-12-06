@@ -4,6 +4,7 @@ import { CardSuit, suitFromString } from './suit'
 const Attr = {
     value: 'value',
     suit: 'suit',
+    facedown: 'facedown',
 }
 
 export class PlayingCard extends HTMLElement {
@@ -47,14 +48,21 @@ export class PlayingCard extends HTMLElement {
             </defs>
         </svg>
         <div id="${Attr.suit}-container">
-            <div class="top-left">
-                <div class="${Attr.suit}"></div>
-            </div>
-            <div class="bottom-right">
-                <div class="${Attr.suit}"></div>
-            </div>
-            <div class="center">
-                <span class="${Attr.value}"></span>
+            <div class="flip-container">
+                <div class="front">
+                    <div class="top-left">
+                        <div class="${Attr.suit}"></div>
+                    </div>
+                    <div class="bottom-right">
+                        <div class="${Attr.suit}"></div>
+                    </div>
+                    <div class="center">
+                        <span class="${Attr.value}"></span>
+                    </div>
+                </div>
+                <div class="back">
+                    <div class="back-pattern"></div>
+                </div>
             </div>
         </div>
     `
@@ -68,9 +76,10 @@ export class PlayingCard extends HTMLElement {
 
             width: var(--w);
             height: calc(7 / 5 * var(--w));
-            border: calc(0.025 * var(--w)) solid black;
-            border-radius: calc(0.0625 * var(--w));
-            background-color: var(--playing-card-bg, hsl(0, 0%, 100%));
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
         
         #paths {
@@ -149,6 +158,57 @@ export class PlayingCard extends HTMLElement {
         .spades .suit {
             clip-path: url(#spades);
         }
+
+        .front, .back {
+            width: 100%;
+            height: 100%;
+            transition: transform 1s;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+            border: calc(0.025 * var(--w)) solid black;
+            border-radius: calc(0.0625 * var(--w));
+            background-color: var(--playing-card-bg, hsl(0, 0%, 100%));
+        }
+
+        .front {
+            transform: rotateY(0deg);
+        }
+
+        .back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotateY(180deg);
+        }
+
+        .flip-container {
+            width: 100%;
+            height: 100%;
+            perspective: calc(20 * var(--w));
+        }
+
+        :host([facedown]) .front {
+            transform: rotateY(180deg);
+        }
+
+        :host([facedown]) .back {
+            transform: rotateY(360deg);
+        }
+
+        .back {
+            padding: calc(0.04 * var(--w));
+        }
+
+        .back-pattern {
+            --bg: var(--playing-card-back-bg, hsl(350, 100%, 50%));
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(54.46deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg)),
+                linear-gradient(125.54deg, var(--bg) 25%, transparent 25%, transparent 75%, var(--bg) 75%, var(--bg));
+            background-size: calc(0.1245 * var(--w)) calc(0.182 * var(--w));
+            border-radius: calc(0.02 * var(--w));
+        }
     `
 
     private elements = {
@@ -190,6 +250,13 @@ export class PlayingCard extends HTMLElement {
         this.setAttribute(Attr.suit, v ?? '')
     }
 
+    get facedown(): boolean {
+        return this.hasAttribute(Attr.facedown)
+    }
+    set facedown(v: boolean) {
+        this.toggleAttribute(Attr.facedown, v)
+    }
+
     private createRoot(): ShadowRoot {
         const root = this.shadowRoot ?? this.attachShadow({ mode: 'open' })
 
@@ -210,14 +277,20 @@ export class PlayingCard extends HTMLElement {
         this.elements.suitContainer()!.className = CardSuit[this.suit!]
     }
 
+    private accessibleName = (): string => {
+        if (this.facedown)
+            return 'card faced down'
+        else if (this.value && this.suit)
+            return `${CardValue[this.value]} of ${CardSuit[this.suit]}`
+        else
+            return 'unknown card'
+    }
+
     private setAccessibility = () => {
         if (!this.getAttribute('role')) {
             this.setAttribute('role', 'figure')
         }
 
-        if (!this.value || !this.suit)
-            this.setAttribute('aria-label', 'unknown card')
-        else
-            this.setAttribute('aria-label', `${CardValue[this.value]} of ${CardSuit[this.suit]}`)
+        this.setAttribute('aria-label', this.accessibleName())
     }
 }

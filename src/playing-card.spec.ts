@@ -96,6 +96,22 @@ describe('my-component', () => {
         })
     })
 
+    describe('facedown', () => {
+        it('flipping a card', async () => {
+            const elem = await fixture<PlayingCard>(`
+                <playing-card value="a" suit="s" facedown></playing-card>
+            `)
+
+            expect(label(elem)).to.equal('card faced down')
+
+            elem.facedown = false
+            expect(label(elem)).to.equal('ace of spades')
+
+            elem.toggleAttribute('facedown')
+            expect(label(elem)).to.equal('card faced down')
+        })
+    })
+
     describe('accessibility', () => {
         it('default role', async () => {
             const elem = await fixture<PlayingCard>(`
