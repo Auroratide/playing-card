@@ -1,3 +1,5 @@
 import { PlayingCard } from './playing-card'
 
-window.customElements.define(PlayingCard.elementName, PlayingCard)
+if (!window.customElements.get(PlayingCard.elementName)) {
+    window.customElements.define(PlayingCard.elementName, PlayingCard)
+}
